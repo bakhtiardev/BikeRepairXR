@@ -76,7 +76,7 @@ public class FixPointerInteraction : Editor
                         System.Type buttonType = ovrInputType.GetNestedType("Button");
                         if (buttonType != null) {
                             var val = System.Enum.Parse(buttonType, "PrimaryIndexTrigger");
-                            clickProp.enumValueFlag = (int)val;
+                            clickProp.enumValueFlag = System.Convert.ToInt32(val);
                         }
                     }
                 }
