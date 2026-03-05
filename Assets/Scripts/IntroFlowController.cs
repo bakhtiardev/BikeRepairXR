@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class IntroFlowController : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class IntroFlowController : MonoBehaviour
     public Button backButton;
     public Button nextButton;
     public int currentPage = 0;
+
+    [Header("Scene Settings")]
+    public string bicycleSceneName = "BicycleScene";
 
     void Start()
     {
@@ -30,8 +34,8 @@ public class IntroFlowController : MonoBehaviour
 
     void OnNextPressed()
     {
-        Debug.Log("Next button pressed! Action applies later.");
         currentPage++;
+        SceneManager.LoadScene(bicycleSceneName);
     }
 
     void OnBackPressed()
