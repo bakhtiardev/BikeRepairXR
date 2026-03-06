@@ -22,7 +22,7 @@
 # Unity files
 *.asmdef unity-yaml-file -linguist-generated
 *.anim unity-yaml-file
-*.asset merge=unityyamlmerge eol=lf
+*.asset unity-yaml-file text eol=lf
 *.brush unity-yaml-file
 *.controller unity-yaml-file
 *.flare unity-yaml-file
@@ -31,19 +31,19 @@
 *.guiskin unity-yaml-file
 *.mask unity-yaml-file
 *.mat unity-yaml-file
-*.meta merge=unityyamlmerge eol=lf
+*.meta unity-yaml-file text eol=lf
 *.mixer unity-yaml-file
 *.overrideController unity-yaml-file
 *.physicMaterial unity-yaml-file
 *.physicsMaterial2D unity-yaml-file
 *.playable unity-yaml-file
-*.prefab merge=unityyamlmerge eol=lf
+*.prefab unity-yaml-file text eol=lf
 *.preset unity-yaml-file
 *.renderTexture unity-yaml-file
 *.shadervariants unity-yaml-file
 *.spriteatlas unity-yaml-file
 *.terrainlayer unity-yaml-file
-*.unity merge=unityyamlmerge eol=lf
+*.unity unity-yaml-file text eol=lf
 
 # Unity binary files
 *.bundle lfs-file
