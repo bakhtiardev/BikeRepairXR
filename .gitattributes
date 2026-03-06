@@ -139,7 +139,6 @@
 *.tar lfs-file
 
 # Other
-*.unity filter=lfs diff=lfs merge=lfs -text
 *.unity merge=unityyamlmerge eol=lf
 *.prefab merge=unityyamlmerge eol=lf
 *.meta merge=unityyamlmerge eol=lf
