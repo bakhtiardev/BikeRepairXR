@@ -12,9 +12,21 @@ public class WrenchProximityGrab : MonoBehaviour
     [Tooltip("How close (metres) a controller must be to the wrench to pick it up.")]
     public float pickupRange = 0.4f;
 
+    [Tooltip("Optional child transform at the short Allen-key tip. Used by BoltLooseningInteraction for precise zone detection. Leave empty to fall back to wrench root + tipOffset.")]
+    public Transform wrenchTip;
+
+    // ── Public state for other scripts ───────────────────────────────────────
+    /// <summary>True while the wrench is being held (grip trigger held).</summary>
+    public bool IsHeld => _heldBy != null;
+
+    /// <summary>Which OVR controller is currently holding the wrench (None if not held).</summary>
+    public OVRInput.Controller HoldingController => _holdingController;
+
+    // ── Private fields ────────────────────────────────────────────────────────
     private Transform _leftController;
     private Transform _rightController;
     private Transform _heldBy = null;
+    private OVRInput.Controller _holdingController = OVRInput.Controller.None;
     private Rigidbody _rb;
 
     private void Start()
@@ -62,18 +74,20 @@ public class WrenchProximityGrab : MonoBehaviour
 
         float dist = Vector3.Distance(hand.position, transform.position);
         if (dist <= pickupRange)
-            Grab(hand);
+            Grab(hand, controller);
     }
 
-    private void Grab(Transform hand)
+    private void Grab(Transform hand, OVRInput.Controller controller)
     {
         _heldBy = hand;
+        _holdingController = controller;
         if (_rb != null) _rb.isKinematic = true;
     }
 
     private void Drop()
     {
         _heldBy = null;
+        _holdingController = OVRInput.Controller.None;
         // Wrench stays wherever it was dropped
     }
 }
