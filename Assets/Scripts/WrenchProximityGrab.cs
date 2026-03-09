@@ -12,32 +12,23 @@ public class WrenchProximityGrab : MonoBehaviour
     [Tooltip("How close (metres) a controller must be to the wrench to pick it up.")]
     public float pickupRange = 0.4f;
 
-    [Tooltip("Optional child transform at the short Allen-key tip. Used by BoltLooseningInteraction for precise zone detection. Leave empty to fall back to wrench root + tipOffset.")]
-    public Transform wrenchTip;
-
-    // ── Public state for other scripts ───────────────────────────────────────
-    /// <summary>True while the wrench is being held (grip trigger held).</summary>
-    public bool IsHeld => _heldBy != null;
-
-    /// <summary>Which OVR controller is currently holding the wrench (None if not held).</summary>
-    public OVRInput.Controller HoldingController => _holdingController;
-
-    // ── Private fields ────────────────────────────────────────────────────────
     private Transform _leftController;
     private Transform _rightController;
     private Transform _heldBy = null;
-    private OVRInput.Controller _holdingController = OVRInput.Controller.None;
     private Rigidbody _rb;
+    private WrenchTool wrenchTool;
+    public WrenchCollisionHelper collisionHelper;
+
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
+        wrenchTool = GetComponent<WrenchTool>();
+        collisionHelper = GetComponent<WrenchCollisionHelper>();
+    }
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        // Start kinematic so wrench rests on the table without physics.
-        if (_rb != null)
-        {
-            _rb.isKinematic = true;
-            _rb.useGravity  = false;
-        }
 
         OVRCameraRig rig = FindFirstObjectByType<OVRCameraRig>();
         if (rig != null)
@@ -51,20 +42,17 @@ public class WrenchProximityGrab : MonoBehaviour
     {
         if (_heldBy == null)
         {
-            // Try grab with left grip
             TryGrab(OVRInput.Controller.LTouch, _leftController);
-            // Try grab with right grip
             TryGrab(OVRInput.Controller.RTouch, _rightController);
         }
         else
         {
-            // Follow the holding hand
             transform.position = _heldBy.position;
             transform.rotation = _heldBy.rotation;
 
-            // Release when grip is let go
-            bool leftRelease  = _heldBy == _leftController  &&
-                                OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch);
+            bool leftRelease = _heldBy == _leftController &&
+                               OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch);
+
             bool rightRelease = _heldBy == _rightController &&
                                 OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch);
 
@@ -80,29 +68,61 @@ public class WrenchProximityGrab : MonoBehaviour
 
         float dist = Vector3.Distance(hand.position, transform.position);
         if (dist <= pickupRange)
-            Grab(hand, controller);
+            Grab(hand);
     }
 
-    private void Grab(Transform hand, OVRInput.Controller controller)
+    private void Grab(Transform hand)
     {
         _heldBy = hand;
-        _holdingController = controller;
+
         if (_rb != null)
         {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
             _rb.isKinematic = true;
-            _rb.useGravity  = false;
         }
+
+        if(collisionHelper != null)
+            collisionHelper.IgnoreCollisionWithWheel(true);
+
+        if (wrenchTool != null)
+            wrenchTool.SetHeld(true);
+
+        Debug.Log("Wrench grabbed");
     }
 
     private void Drop()
     {
         _heldBy = null;
-        _holdingController = OVRInput.Controller.None;
-        // Enable gravity so the wrench falls to the floor.
+
+        if (wrenchTool != null)
+            wrenchTool.SetHeld(false);
+
+        transform.position += transform.right * 0.08f + Vector3.up * 0.03f;
+
         if (_rb != null)
         {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+            _rb.useGravity = true;
             _rb.isKinematic = false;
-            _rb.useGravity  = true;
         }
+
+        if (collisionHelper != null)
+            StartCoroutine(collisionHelper.ReenableWheelCollisionAfterDelay(0.25f));
+
+        Debug.Log("Wrench dropped");
+    }
+
+    public void OnGrabbed()
+    {
+        if (wrenchTool != null)
+            wrenchTool.SetHeld(true);
+    }
+
+    public void OnReleased()
+    {
+        if (wrenchTool != null)
+            wrenchTool.SetHeld(false);
     }
 }

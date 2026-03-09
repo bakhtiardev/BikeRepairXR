@@ -22,6 +22,7 @@
 # Unity files
 *.asmdef unity-yaml-file -linguist-generated
 *.anim unity-yaml-file
+*.asset unity-yaml-file
 *.brush unity-yaml-file
 *.controller unity-yaml-file
 *.flare unity-yaml-file
@@ -138,30 +139,6 @@
 *.rar lfs-file
 *.tar lfs-file
 
-# Other
-*.unity diff=unity merge=unityyamlmerge eol=lf
-*.prefab diff=unity merge=unityyamlmerge eol=lf
-*.meta diff=unity merge=unityyamlmerge eol=lf
-*.anim diff=unity merge=unityyamlmerge eol=lf
-*.controller diff=unity merge=unityyamlmerge eol=lf
-
-
-# Large binary assets
-*.png filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.mp3 filter=lfs diff=lfs merge=lfs -text
-*.ogg filter=lfs diff=lfs merge=lfs -text
+*.unity filter=lfs diff=lfs merge=lfs -text
 *.mp4 filter=lfs diff=lfs merge=lfs -text
-*.avi filter=lfs diff=lfs merge=lfs -text
-*.mov filter=lfs diff=lfs merge=lfs -text
-*.pdf filter=lfs diff=lfs merge=lfs -text
-*.zip filter=lfs diff=lfs merge=lfs -text
-*.7z filter=lfs diff=lfs merge=lfs -text
-*.gz filter=lfs diff=lfs merge=lfs -text
-*.rar filter=lfs diff=lfs merge=lfs -text
-*.tar filter=lfs diff=lfs merge=lfs -text
-*.fbx filter=lfs diff=lfs merge=lfs -text
-*.wav filter=lfs diff=lfs merge=lfs -text
-*.tga filter=lfs diff=lfs merge=lfs -text
-*.exr filter=lfs diff=lfs merge=lfs -text
 *.psd filter=lfs diff=lfs merge=lfs -text
