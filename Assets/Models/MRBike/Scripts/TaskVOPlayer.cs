@@ -24,7 +24,7 @@ namespace MRBike
 
         [SerializeField] private TMP_Text m_debugText;
         [SerializeField] private float m_voDelay = 0.5f;
-        [SerializeField] private TaskHandler m_taskHandler;
+        
 
         private bool[] m_played;
         private int m_clipsPlayed = 0;
@@ -105,22 +105,7 @@ namespace MRBike
             _ = StartCoroutine(PlayDelayed(m_voDelay, clip));
         }
 
-        private IEnumerator PlayDelayed(float delay, int clip)
-        {
-            float timer = 0;
-            while (timer < delay)
-            {
-                timer += Time.deltaTime;
-                yield return null;
-            }
-
-            if (m_taskHandler)
-            {
-                m_taskHandler.TaskComplete(clip);
-            }
-
-            PlayOnce(clip);
-        }
+private IEnumerator PlayDelayed(float delay, int clip) { float timer = 0; while (timer < delay) { timer += Time.deltaTime; yield return null; } PlayOnce(clip); }
 
         private IEnumerator PlayFinal(float delay)
         {
@@ -134,25 +119,7 @@ namespace MRBike
             m_audioSource.PlayOneShot(m_finalClip, m_volume);
         }
 
-        private void Awake()
-        {
-            m_played = new bool[m_clips.Length];
-            for (var x = 0; x < m_clips.Length; x++)
-            {
-                m_played[x] = false;
-            }
-
-            if (m_playOnAwake)
-            {
-                PlayOnce(0);
-
-                if (m_taskHandler)
-                {
-                    m_taskHandler.TaskComplete(0);
-                }
-                _ = StartCoroutine(PlayDelayed(m_clips[0].length, 1));
-            }
-        }
+private void Awake() { m_played = new bool[m_clips.Length]; for (var x = 0; x < m_clips.Length; x++) { m_played[x] = false; } if (m_playOnAwake) { PlayOnce(0); _ = StartCoroutine(PlayDelayed(m_clips[0].length, 1)); } }
 
         private bool CheckForComplete()
         {

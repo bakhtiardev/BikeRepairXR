@@ -1,7 +1,7 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 
 using System.Collections.Generic;
-using Meta.Utilities;
+
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
@@ -22,7 +22,6 @@ namespace MRBike
             public float Max => m_max;
         }
 
-        [AutoSet]
         [SerializeField] private AudioSource m_audioSource = null;
 
         [Tooltip("Audio clip arrays with a value greater than 1 will have randomized playback.")]

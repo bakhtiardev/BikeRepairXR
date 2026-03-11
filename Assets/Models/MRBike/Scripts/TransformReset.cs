@@ -1,7 +1,7 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 
 using System.Collections;
-using Meta.Utilities;
+
 using Oculus.Interaction;
 using UnityEngine;
 
@@ -13,7 +13,6 @@ namespace MRBike
         [SerializeField] private Transform m_returnHomeTarget;
         [SerializeField] private float m_returnHomeTime = 1.5f;
 
-        [AutoSet]
         [SerializeField] private Grabbable m_grabbable;
 
         private Transform m_holdPoint;

@@ -1,6 +1,7 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace MRBike
@@ -9,7 +10,7 @@ namespace MRBike
     {
         [FormerlySerializedAs("rightHandObject")][SerializeField] private GameObject m_rightHandObject;
         [FormerlySerializedAs("leftHandObject")][SerializeField] private GameObject m_leftHandObject;
-        [FormerlySerializedAs("bikeVisibleObject")][SerializeField] private BikeVisibleObject m_bikeVisibleObject;
+        [SerializeField] private UnityEvent m_onTrigger;
 
         private bool m_currentHandednessIsRight = true;
 
@@ -27,22 +28,8 @@ namespace MRBike
             }
         }
 
-        public void SetRight()
-        {
-            if (!m_currentHandednessIsRight)
-            {
-                m_currentHandednessIsRight = true;
-                m_bikeVisibleObject.Trigger();
-            }
-        }
+public void SetRight() { if (!m_currentHandednessIsRight) { m_currentHandednessIsRight = true; m_onTrigger?.Invoke(); } }
 
-        public void SetLeft()
-        {
-            if (m_currentHandednessIsRight)
-            {
-                m_currentHandednessIsRight = false;
-                m_bikeVisibleObject.Trigger();
-            }
-        }
+public void SetLeft() { if (m_currentHandednessIsRight) { m_currentHandednessIsRight = false; m_onTrigger?.Invoke(); } }
     }
 }

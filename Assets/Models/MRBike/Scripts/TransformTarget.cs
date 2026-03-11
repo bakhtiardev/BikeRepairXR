@@ -50,24 +50,6 @@ namespace MRBike
             }
         }
 
-        public void SetOnTarget()
-        {
-            if (m_removeGrabbableOnComplete && m_grabbedObject)
-            {
-                m_grabbedObject.SetActive(false);
-                if (m_grabbedObject.TryGetComponent<BikeVisibleObject>(out var bikeObj))
-                {
-                    bikeObj.Hide();
-                }
-            }
-
-            gameObject.SetActive(false);
-            if (m_debugText != null)
-            {
-                m_debugText.text = "Contact";
-            }
-
-            OnComplete?.Invoke();
-        }
+public void SetOnTarget() { if (m_removeGrabbableOnComplete && m_grabbedObject) { m_grabbedObject.SetActive(false); } gameObject.SetActive(false); if (m_debugText != null) { m_debugText.text = "Contact"; } OnComplete?.Invoke(); }
     }
 }

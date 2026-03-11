@@ -71,6 +71,7 @@ Shader "MRBike/Lighting"
             #pragma multi_compile __ IBL
             #pragma multi_compile __ OCCLUSION_MAP
 
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Core.hlsl"
             #include "MRBike_Lighting.hlsl"
  
             ENDHLSL
