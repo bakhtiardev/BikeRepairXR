@@ -83,7 +83,7 @@ Shader "MRBike/LightingAffordance"
             #define AFFORDANCE 1
             #define TRANSPARENT 1
 
-            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "MRBike_Lighting.hlsl"
 
             ENDHLSL
