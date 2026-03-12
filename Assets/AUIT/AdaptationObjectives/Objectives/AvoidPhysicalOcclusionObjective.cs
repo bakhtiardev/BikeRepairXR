@@ -1,11 +1,7 @@
-using AUIT.AdaptationObjectives;
 using AUIT.AdaptationObjectives.Definitions;
 using AUIT.AdaptationObjectives.Extras;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace AUIT.AdaptationObjectives
 {
@@ -17,124 +13,169 @@ namespace AUIT.AdaptationObjectives
         [SerializeField]
         private LayerMask physicalLayerMask;
 
+        [SerializeField]
+        private float castRadius = 0.05f;
+
+        [SerializeField]
+        private float moveStep = 0.25f;
+
         public override ObjectiveType ObjectiveType => ObjectiveType.AvoidOcclusion;
 
-        private Vector3[] GetCheckPoints(Layout layout)
-        {
-            // Assuming x = width, y = height
-            // Checking center and corners of the layout element
-            List<Vector3> checkTargetsLocal = new List<Vector3>();
-            for (float x = -0.5f; x <= 0.5f; x += 0.25f)
-            {
-                for (float y = -0.5f; y <= 0.5f; y += 0.25f)
-                {
-                    checkTargetsLocal.Add(new Vector3(x, y, 0));
-                }
-            }
-            
-
-            Matrix4x4 trs = Matrix4x4.TRS(layout.Position, layout.Rotation, layout.Scale);
-            Vector3[] checkTargets = new Vector3[checkTargetsLocal.Count];
-            for (int i = 0; i < checkTargetsLocal.Count; i++)
-            {
-                checkTargets[i] = trs.MultiplyPoint(checkTargetsLocal[i]);
-            }
-
-            return checkTargets;
-        }
-
-        private bool IsOccluding(Vector3 optimizationTarget)
-        {
-            Transform contextSourceTransform = userContextSource.GetValue();
-            Vector3 toElement = optimizationTarget - contextSourceTransform.position;
-            Vector3 direction = toElement.normalized;
-            float distance = toElement.magnitude;
-            bool occluding = Physics.Raycast(contextSourceTransform.position, direction, distance, physicalLayerMask);
-            return occluding;
-        }
-
-
-        public override float CostFunction(Layout optimizationTarget, Layout initialLayout = null)
-        {
-            if (userContextSource == null)
-            {
-                Debug.LogError("PhysicalOcclusionObjective.CostFunction(): User context source is not set.");
-            }
-            Vector3[] checkTargets = GetCheckPoints(optimizationTarget);
-            foreach (Vector3 target in checkTargets)
-            {
-                if (IsOccluding(target))
-                {
-                    return 1;
-                }
-            }
-            return 0; 
-        }
-
-        private Vector3 GetPlanarDirection(Layout optimizationTarget)
-        {
-            Transform contextSourceTransform = userContextSource.GetValue();
-            Vector3 occludedDirection = (optimizationTarget.Position - contextSourceTransform.position).normalized;
-            Vector3 tangent = Vector3.Cross(occludedDirection, Vector3.up);
-            Vector3 bitangent = Vector3.Cross(occludedDirection, tangent);
-            float angle = Random.Range(0, 2 * Mathf.PI);
-            Vector3 randomDirection = (tangent * Mathf.Cos(angle) + bitangent * Mathf.Sin(angle)).normalized;
-            return randomDirection;
-
-        }
-
-        public override Layout OptimizationRule(Layout optimizationTarget, Layout initialLayout = null)
-        {
-            if (userContextSource == null)
-            {
-                Debug.LogError("PhysicalOcclusionObjective.OptimizationRule(): User context source is not set.");
-            }
-
-            Layout result = optimizationTarget.Clone();
-
-            Vector3 moveDirection = Vector3.zero;
-
-            float moveStrategy = Random.value;
-            if (moveStrategy < 0.33)
-            {
-                Vector3[] checkPoints = GetCheckPoints(optimizationTarget);
-                Vector3 center = checkPoints[4];
-                for (int i = 0; i < 4; i++)
-                {
-                    Vector3 corner = checkPoints[i];
-                    if (IsOccluding(corner))
-                    {
-                        moveDirection += (corner - center).normalized;
-                    }
-                }
-                moveDirection.Normalize();
-            } else if (moveStrategy < 0.66) {
-                moveDirection = GetPlanarDirection(optimizationTarget);
-            } else
-            {
-                moveDirection = Random.onUnitSphere;
-            }
-
-            result.Position += Random.Range(0f, 0.1f) * moveDirection;
-
-            return result; 
-        }
-
-        public override Layout DirectRule(Layout optimizationTarget)
-        {
-            throw new System.NotImplementedException();
-        }
+        private RectTransform rectTransform;
 
         private new void OnEnable()
         {
             base.OnEnable();
 
             if (userContextSource == null)
-            {
                 userContextSource = GetUserPoseContextSource();
+
+            rectTransform = GetComponent<RectTransform>();
+        }
+
+        private Vector3[] GetCheckPoints(Layout layout)
+        {
+            float width = 1f;
+            float height = 1f;
+
+            if (rectTransform != null)
+            {
+                // World-space canvas: rect width/height scaled into world units
+                width = rectTransform.rect.width * transform.lossyScale.x;
+                height = rectTransform.rect.height * transform.lossyScale.y;
             }
 
-            physicalLayerMask = LayerMask.GetMask("Physical Environment");
+            float halfW = width * 0.5f;
+            float halfH = height * 0.5f;
+
+            // Center + 4 corners + edge midpoints
+            Vector3[] localPoints = new Vector3[]
+            {
+                new Vector3(0f, 0f, 0f),                  // center
+                new Vector3(-halfW, -halfH, 0f),         // bottom-left
+                new Vector3(-halfW,  halfH, 0f),         // top-left
+                new Vector3( halfW, -halfH, 0f),         // bottom-right
+                new Vector3( halfW,  halfH, 0f),         // top-right
+                new Vector3(0f, -halfH, 0f),             // bottom
+                new Vector3(0f,  halfH, 0f),             // top
+                new Vector3(-halfW, 0f, 0f),             // left
+                new Vector3( halfW, 0f, 0f),             // right
+            };
+
+            Matrix4x4 trs = Matrix4x4.TRS(layout.Position, layout.Rotation, Vector3.one);
+
+            Vector3[] worldPoints = new Vector3[localPoints.Length];
+            for (int i = 0; i < localPoints.Length; i++)
+                worldPoints[i] = trs.MultiplyPoint(localPoints[i]);
+
+            return worldPoints;
+        }
+
+        private bool IsOccluding(Vector3 targetPoint, out RaycastHit nearestHit)
+        {
+            nearestHit = default;
+
+            Transform user = userContextSource.GetValue();
+            Vector3 origin = user.position;
+            Vector3 toTarget = targetPoint - origin;
+            float distance = toTarget.magnitude;
+
+            if (distance <= 0.0001f)
+                return false;
+
+            Vector3 direction = toTarget / distance;
+
+            RaycastHit[] hits = Physics.SphereCastAll(
+                origin,
+                castRadius,
+                direction,
+                distance,
+                physicalLayerMask,
+                QueryTriggerInteraction.Ignore
+            );
+
+            float nearestDistance = float.MaxValue;
+            bool found = false;
+
+            foreach (var hit in hits)
+            {
+                if (hit.transform == null)
+                    continue;
+
+                // Ignore self / children
+                if (hit.transform == transform || hit.transform.IsChildOf(transform))
+                    continue;
+
+                if (hit.distance < nearestDistance)
+                {
+                    nearestDistance = hit.distance;
+                    nearestHit = hit;
+                    found = true;
+                }
+            }
+
+            return found;
+        }
+
+        public override float CostFunction(Layout optimizationTarget, Layout initialLayout = null)
+        {
+            if (userContextSource == null)
+            {
+                Debug.LogError("AvoidPhysicalOcclusionObjective: User context source is not set.");
+                return 0f;
+            }
+
+            Vector3[] checkPoints = GetCheckPoints(optimizationTarget);
+
+            foreach (Vector3 point in checkPoints)
+            {
+                if (IsOccluding(point, out _))
+                    return 1f;
+            }
+
+            return 0f;
+        }
+
+        public override Layout OptimizationRule(Layout optimizationTarget, Layout initialLayout = null)
+        {
+            Layout result = optimizationTarget.Clone();
+
+            if (userContextSource == null)
+            {
+                Debug.LogError("AvoidPhysicalOcclusionObjective: User context source is not set.");
+                return result;
+            }
+
+            Vector3[] checkPoints = GetCheckPoints(optimizationTarget);
+
+            Vector3 accumulatedPush = Vector3.zero;
+            int hitCount = 0;
+
+            foreach (Vector3 point in checkPoints)
+            {
+                if (IsOccluding(point, out RaycastHit hit))
+                {
+                    // Push away from the hit surface normal
+                    accumulatedPush += hit.normal;
+                    hitCount++;
+                }
+            }
+
+            if (hitCount > 0)
+            {
+                Vector3 moveDirection = (accumulatedPush / hitCount).normalized;
+                if (moveDirection.sqrMagnitude > 0.0001f)
+                {
+                    result.Position += moveStep * moveDirection;
+                }
+            }
+
+            return result;
+        }
+
+        public override Layout DirectRule(Layout optimizationTarget)
+        {
+            return optimizationTarget;
         }
 
         public override float[] GetParameters()
@@ -147,5 +188,4 @@ namespace AUIT.AdaptationObjectives
             weight = parameters[0];
         }
     }
-
 }
