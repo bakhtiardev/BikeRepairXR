@@ -25,6 +25,18 @@ namespace MRBike
         [SerializeField] private float m_offset = 0;
         [SerializeField] private bool m_removeGrabbableOnComplete = false;
 
+        [Header("Prerequisite")]
+        [Tooltip("If set, this target only becomes active once the prerequisite TransformTarget has completed. " +
+                 "Drag Wheel_Target here on Axle_Target so the axle can only snap after the front wheel is placed.")]
+        [SerializeField] private TransformTarget m_prerequisite;
+
+        [Header("Snap Feedback")]
+        [Tooltip("Animator to play when this part snaps into place (e.g. Axle Animated.controller).")]
+        [SerializeField] private Animator m_snapAnimator;
+
+        [Tooltip("AudioClip to play when this part snaps into place.")]
+        [SerializeField] private AudioClip m_snapAudioClip;
+
         [SerializeField] private TMP_Text m_debugText;
 
         public UnityEvent OnComplete;
@@ -32,6 +44,9 @@ namespace MRBike
         private bool m_completed = false;
         private bool m_snapped   = false;   // enforce position in LateUpdate
         private int  m_snapFrames = 0;      // how many frames to keep enforcing
+
+        /// <summary>True once this target has been completed (used by prerequisite checks on other targets).</summary>
+        public bool IsCompleted => m_completed;
 
         public GameObject GrabbedObject
         {
@@ -41,6 +56,9 @@ namespace MRBike
         private void Update()
         {
             if (m_completed || m_grabbedObject == null) return;
+
+            // Block snap and attraction until the prerequisite part is placed.
+            if (m_prerequisite != null && !m_prerequisite.IsCompleted) return;
 
             float dist  = Vector3.Distance(transform.position, m_grabbedObject.transform.position) - m_offset;
             float angle = Vector3.Angle(m_grabbedObject.transform.up, transform.up);
@@ -117,6 +135,19 @@ namespace MRBike
                 //    any still-running coroutines or late transformers.
                 m_snapped    = true;
                 m_snapFrames = 10;
+
+                // 6. Activate (it may be hidden by default) and play snap animation.
+                if (m_snapAnimator != null)
+                {
+                    m_snapAnimator.gameObject.SetActive(true);
+                    m_snapAnimator.enabled = true;
+                    m_snapAnimator.Play(0, 0, 0f);
+                }
+
+                // 7. Play snap sound via PlayClipAtPoint — static call spawns its own
+                //    temp AudioSource, so it survives this GameObject being deactivated.
+                if (m_snapAudioClip != null)
+                    AudioSource.PlayClipAtPoint(m_snapAudioClip, transform.position);
 
                 if (m_removeGrabbableOnComplete)
                     m_grabbedObject.SetActive(false);
