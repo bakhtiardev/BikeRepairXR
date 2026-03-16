@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
@@ -4359,3 +4360,8 @@ SceneRoots:
   - {fileID: 560129194}
   - {fileID: 953458477}
   - {fileID: 1914155783}
+=======
+version https://git-lfs.github.com/spec/v1
+oid sha256:d7e8f7e8437d8206a81a5533432f0567adc4fab6574110d520ab6a9d315c03b7
+size 218175
+>>>>>>> bfe2beb (changed collider type on the walls)
