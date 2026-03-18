@@ -212,6 +212,13 @@ namespace MRBike
                     else
                     {
                         m_assemblyPrefabToShow.SetActive(true);
+                        
+                        // Play seat adjustment audio if SeatAdjustementUpdater is present
+                        var seatAdjuster = m_assemblyPrefabToShow.GetComponentInChildren<SeatAdjustementUpdater>(includeInactive: true);
+                        if (seatAdjuster != null)
+                        {
+                            seatAdjuster.PlaySnapAudio();
+                        }
                     }
                 }
 

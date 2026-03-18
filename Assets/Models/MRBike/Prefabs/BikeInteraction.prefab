@@ -10606,6 +10606,10 @@ MonoBehaviour:
   m_coef: -1.3
   m_suffix: m
   m_moveCheck: 0.01
+  m_seatAdjustAudioClip: {fileID: 8300000, guid: 104a1a28ae7200f4e8e420fbb7bfe70e, type: 3}
+  m_seatAdjustVOClip: {fileID: 8300000, guid: 68a30ed0bce0a1949ac103260fc02dfe, type: 3}
+  m_upDownArrow: {fileID: 2908477127168071708}
+  m_targetHeight: 0.65
 --- !u!1 &2928493260645832999
 GameObject:
   m_ObjectHideFlags: 0

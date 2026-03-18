@@ -18,20 +18,48 @@ namespace MRBike
         [SerializeField] private string m_suffix = " cm";
         [SerializeField] private float m_moveCheck = 0.01f;
 
+        [Header("Audio & Arrow")]
+        [SerializeField] private AudioClip m_seatAdjustAudioClip;
+        [SerializeField] private AudioClip m_seatAdjustVOClip;
+        [SerializeField] private GameObject m_upDownArrow;
+        [SerializeField] private float m_targetHeight = 0.65f;
+
         private float m_previousDistance;
         private Vector3 m_startPoint;
         private bool m_grabbed = false;
         private float m_travel;
+        private bool m_arrowDisabled = false;
 
         private void Start()
         {
             m_startPoint = m_movingObject.transform.position;
             m_fiducialCtrl.Height = m_baseDistance * 100;
+            
+            // If arrow is not assigned, try to find it
+            if (m_upDownArrow == null)
+            {
+                m_upDownArrow = gameObject;
+            }
         }
 
         public void Grab(bool grabState)
         {
             m_grabbed = grabState;
+        }
+
+        public void PlaySnapAudio()
+        {
+            // Play the SFX (seatpost insert sound)
+            if (m_seatAdjustAudioClip != null)
+            {
+                AudioSource.PlayClipAtPoint(m_seatAdjustAudioClip, transform.position);
+            }
+            
+            // Play the VO (voice over - adjust height instruction)
+            if (m_seatAdjustVOClip != null)
+            {
+                AudioSource.PlayClipAtPoint(m_seatAdjustVOClip, transform.position);
+            }
         }
 
         private void Update()
@@ -50,6 +78,24 @@ namespace MRBike
 
             m_fiducialCtrl.Height = m_baseDistance * 100;
             m_valueLabel.text = m_baseDistance.ToString("F") + m_suffix;
+
+            // Disable arrow when target height is reached
+            if (m_baseDistance <= m_targetHeight && !m_arrowDisabled)
+            {
+                if (m_upDownArrow != null)
+                {
+                    m_upDownArrow.SetActive(false);
+                    m_arrowDisabled = true;
+                }
+            }
+            else if (m_baseDistance > m_targetHeight && m_arrowDisabled)
+            {
+                if (m_upDownArrow != null)
+                {
+                    m_upDownArrow.SetActive(true);
+                    m_arrowDisabled = false;
+                }
+            }
         }
     }
 }
