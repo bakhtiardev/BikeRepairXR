@@ -39,6 +39,25 @@ namespace MRBike
 
         [SerializeField] private TMP_Text m_debugText;
 
+        [Header("Assembly Prefab")]
+        [Tooltip("Prefab or GameObject to instantiate/enable when this part snaps. " +
+                 "For seat assembly, drag the 3-SeatAdjustable GameObject here to show it after snapping.")]
+        [SerializeField] private GameObject m_assemblyPrefabToShow;
+
+        [Tooltip("If true, instantiate the prefab at the target location. " +
+                 "If false, just enable it (assumes it's already in the scene).")]
+        [SerializeField] private bool m_instantiatePrefab = false;
+
+        [Header("Pre-Snap Visibility")]
+        [Tooltip("Objects that should stay visible while this target has not been completed.")]
+        [SerializeField] private GameObject[] m_showWhileIncomplete;
+
+        [Tooltip("Objects that should stay hidden while this target has not been completed.")]
+        [SerializeField] private GameObject[] m_hideWhileIncomplete;
+
+        [Tooltip("If enabled, objects in Show While Incomplete are hidden once this target completes.")]
+        [SerializeField] private bool m_hideShownObjectsOnComplete = true;
+
         public UnityEvent OnComplete;
 
         private bool m_completed = false;
@@ -55,6 +74,8 @@ namespace MRBike
 
         private void Update()
         {
+            EnforceIncompleteVisibility();
+
             if (m_completed || m_grabbedObject == null) return;
 
             // Block snap and attraction until the prerequisite part is placed.
@@ -98,6 +119,34 @@ namespace MRBike
 
             if (--m_snapFrames <= 0)
                 m_snapped = false;
+        }
+
+        private void OnEnable()
+        {
+            EnforceIncompleteVisibility();
+        }
+
+        private void EnforceIncompleteVisibility()
+        {
+            if (m_completed) return;
+
+            if (m_showWhileIncomplete != null)
+            {
+                foreach (var go in m_showWhileIncomplete)
+                {
+                    if (go != null && !go.activeSelf)
+                        go.SetActive(true);
+                }
+            }
+
+            if (m_hideWhileIncomplete != null)
+            {
+                foreach (var go in m_hideWhileIncomplete)
+                {
+                    if (go != null && go.activeSelf)
+                        go.SetActive(false);
+                }
+            }
         }
 
         public void SetOnTarget()
@@ -151,6 +200,29 @@ namespace MRBike
 
                 if (m_removeGrabbableOnComplete)
                     m_grabbedObject.SetActive(false);
+
+                // 8. Show or instantiate the assembly prefab (e.g. 3-SeatAdjustable)
+                //    This makes the assembled part appear to complete the assembly feel.
+                if (m_assemblyPrefabToShow != null)
+                {
+                    if (m_instantiatePrefab)
+                    {
+                        Instantiate(m_assemblyPrefabToShow, transform.position, transform.rotation);
+                    }
+                    else
+                    {
+                        m_assemblyPrefabToShow.SetActive(true);
+                    }
+                }
+
+                if (m_hideShownObjectsOnComplete && m_showWhileIncomplete != null)
+                {
+                    foreach (var go in m_showWhileIncomplete)
+                    {
+                        if (go != null && go.activeSelf)
+                            go.SetActive(false);
+                    }
+                }
             }
 
             gameObject.SetActive(false);

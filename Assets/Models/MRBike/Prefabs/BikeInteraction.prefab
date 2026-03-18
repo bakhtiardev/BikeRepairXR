@@ -23045,6 +23045,14 @@ MonoBehaviour:
   m_thresholdAngle: 180
   m_offset: 0
   m_removeGrabbableOnComplete: 1
+  m_showWhileIncomplete:
+  - {fileID: 5360786659204415578}
+  m_hideWhileIncomplete:
+  - {fileID: 6086967110473907126}
+  - {fileID: 3775009901141121346}
+  m_assemblyPrefabToShow: {fileID: 3775009901141121346}
+  m_instantiatePrefab: 0
+  m_hideShownObjectsOnComplete: 1
   m_debugText: {fileID: 4811356613172455078}
   OnComplete:
     m_PersistentCalls:
