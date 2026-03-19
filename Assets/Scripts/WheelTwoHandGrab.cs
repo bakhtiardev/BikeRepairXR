@@ -41,6 +41,10 @@ public class WheelTwoHandGrab : MonoBehaviour
 
     [Tooltip("Canvas shown when the wheel is placed on the carpet (Level Completed message).")]
     public GameObject levelCompletedCanvas;
+
+    [Tooltip("If enabled, the wheel stays upright (initial world rotation) while held with two hands.")]
+    public bool keepUprightWhileHeld = true;
+
     [Header("Horizontal Landing")]
     [Tooltip("World-space Euler angles the wheel snaps to when it lands on the floor or carpet (lying flat). " +
              "Adjust to match your model — default assumes the wheel's spin axis is local-X.")]
@@ -54,6 +58,8 @@ public class WheelTwoHandGrab : MonoBehaviour
     private Transform  _originalParent;
     private Vector3    _startLocalPos;
     private Quaternion _startLocalRot;
+    private Vector3    _startLocalScale;
+    private Quaternion _startWorldRot;
     private Vector3    _prevMidpoint;
 
     private bool _bothHeld   = false;
@@ -93,9 +99,11 @@ public class WheelTwoHandGrab : MonoBehaviour
         }
 
         _startWorldPos  = transform.position;
+        _startWorldRot  = transform.rotation;
         _originalParent = transform.parent;
         _startLocalPos  = transform.localPosition;
         _startLocalRot  = transform.localRotation;
+        _startLocalScale = transform.localScale;
         _bothHeld       = false;
         _detached       = false;
         _finalized      = false;
@@ -132,6 +140,10 @@ public class WheelTwoHandGrab : MonoBehaviour
             Vector3 mid   = Midpoint();
             Vector3 delta = mid - _prevMidpoint;
             transform.position += delta;
+
+            if (keepUprightWhileHeld)
+                transform.rotation = _startWorldRot;
+
             _prevMidpoint = mid;
 
             // Detach once far enough from original position (only check before detach)
@@ -173,6 +185,7 @@ public class WheelTwoHandGrab : MonoBehaviour
             transform.SetParent(_originalParent, worldPositionStays: false);
             transform.localPosition = _startLocalPos;
             transform.localRotation = _startLocalRot;
+            transform.localScale    = _startLocalScale;
             _startWorldPos = transform.position;
 
             if (_rb != null)

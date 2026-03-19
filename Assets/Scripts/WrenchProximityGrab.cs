@@ -30,13 +30,6 @@ public class WrenchProximityGrab : MonoBehaviour
     private Rigidbody _rb;
     private Vector3 _originalPosition;
     private Quaternion _originalRotation;
-    private WrenchTool wrenchTool;
-
-    private void Awake()
-    {
-        _rb = GetComponent<Rigidbody>();
-        wrenchTool = GetComponent<WrenchTool>();
-    }
 
     private void Start()
     {
@@ -104,20 +97,11 @@ public class WrenchProximityGrab : MonoBehaviour
             _rb.isKinematic = true;
             _rb.useGravity  = false;
         }
-
-        if (wrenchTool != null)
-            wrenchTool.SetHeld(true);
-
-        Debug.Log("Wrench grabbed");
     }
 
     private void Drop()
     {
         _heldBy = null;
-
-        if (wrenchTool != null)
-            wrenchTool.SetHeld(false);
-
         _holdingController = OVRInput.Controller.None;
         // Return wrench to its original position on the table.
         transform.position = _originalPosition;
@@ -129,7 +113,5 @@ public class WrenchProximityGrab : MonoBehaviour
             _rb.linearVelocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
         }
-
-        Debug.Log("Wrench dropped");
     }
 }
