@@ -1393,6 +1393,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1505957622}
+    - targetCorrespondingSourceObject: {fileID: 100004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1505957627}
   m_SourcePrefab: {fileID: 100100000, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
 --- !u!114 &595947187 stripped
 MonoBehaviour:
@@ -4449,7 +4452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca54a8f97afbd0d45b2a166e5578fd07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThumbstickLocomotion
-  moveSpeed: 2.5
+  moveSpeed: 1
 --- !u!114 &1505957625 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11400010, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
@@ -4466,6 +4469,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
   m_PrefabInstance: {fileID: 578658691}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1505957627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505957621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 812bc9e2f4f331748b5c3fa000323e5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneRecenter
+  debugMode: 1
+  recenterDelay: 0.1
 --- !u!1 &1559587324
 GameObject:
   m_ObjectHideFlags: 0
