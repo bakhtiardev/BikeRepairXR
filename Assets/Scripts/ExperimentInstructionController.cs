@@ -66,6 +66,9 @@ public class ExperimentInstructionController : MonoBehaviour
     private Canvas targetCanvas;
     private Transform leftController;
     private Transform rightController;
+    private RenderTexture _dynamicRT;
+    // Preserve the width set in the editor; height will be computed from video aspect ratio
+    private float _displayWidth;
 
     void Update()
     {
@@ -141,17 +144,23 @@ public class ExperimentInstructionController : MonoBehaviour
             }
         }
         
+        // Cache the designed display width from the RectTransform so we can
+        // recompute height once we know the video's actual aspect ratio.
+        if (videoImage != null)
+            _displayWidth = videoImage.rectTransform.sizeDelta.x;
+        if (_displayWidth <= 0f) _displayWidth = 1f;
+
         // Initialize video player settings
         if (videoPlayer != null)
         {
             videoPlayer.isLooping = loopCurrentVideo;
             videoPlayer.playOnAwake = false;
-            
-            // Set up render texture if using RawImage
-            if (videoImage != null && videoPlayer.targetTexture == null)
-            {
-                videoPlayer.renderMode = VideoRenderMode.RenderTexture;
-            }
+
+            // RenderTexture mode is required; AspectRatio is ignored in this mode
+            // so we handle it manually via prepareCompleted.
+            videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+            videoPlayer.targetTexture = null; // will be assigned dynamically
+            videoPlayer.prepareCompleted += OnVideoPrepared;
         }
         
         // Add listeners to buttons
@@ -286,7 +295,9 @@ public class ExperimentInstructionController : MonoBehaviour
             {
                 videoPlayer.clip = clip;
                 videoPlayer.isLooping = loopCurrentVideo;
-                videoPlayer.Play();
+                // Prepare first — OnVideoPrepared will create a correctly-sized
+                // RenderTexture and then start playback.
+                videoPlayer.Prepare();
                 
                 // Show video image
                 if (videoImage != null)
@@ -309,6 +320,55 @@ public class ExperimentInstructionController : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Called by the VideoPlayer once it has decoded the first frame and knows
+    /// the video's native width and height. Creates a RenderTexture that exactly
+    /// matches those dimensions so no aspect-ratio distortion occurs, then plays.
+    /// </summary>
+    void OnVideoPrepared(VideoPlayer vp)
+    {
+        uint vidW = vp.width;
+        uint vidH = vp.height;
+
+        if (vidW == 0 || vidH == 0)
+        {
+            Debug.LogWarning("ExperimentInstructionController: Video reported 0 dimensions after prepare.");
+            vp.Play();
+            return;
+        }
+
+        // Release the previous dynamic RT if we had one
+        if (_dynamicRT != null)
+        {
+            if (videoPlayer != null) videoPlayer.targetTexture = null;
+            if (videoImage  != null) videoImage.texture        = null;
+            _dynamicRT.Release();
+            Destroy(_dynamicRT);
+            _dynamicRT = null;
+        }
+
+        _dynamicRT = new RenderTexture((int)vidW, (int)vidH, 0);
+        _dynamicRT.name = "VideoRT_Dynamic";
+        _dynamicRT.Create();
+
+        vp.targetTexture = _dynamicRT;
+
+        if (videoImage != null)
+        {
+            videoImage.texture = _dynamicRT;
+            // Full UV — no manual cropping hacks needed
+            videoImage.uvRect = new Rect(0f, 0f, 1f, 1f);
+
+            // Resize the display quad to match the video's true aspect ratio
+            float aspect = (float)vidW / vidH;
+            RectTransform rt = videoImage.rectTransform;
+            rt.sizeDelta = new Vector2(_displayWidth, _displayWidth / aspect);
+        }
+
+        vp.Play();
+        Debug.Log($"ExperimentInstructionController: Video prepared at {vidW}x{vidH}, RT created, playing.");
+    }
+
     void UpdateButtonStates()
     {
         if (!loopInstructions)
@@ -368,9 +428,20 @@ public class ExperimentInstructionController : MonoBehaviour
             prevButton.onClick.RemoveListener(OnPrevClicked);
         
         // Clean up video player
-        if (videoPlayer != null && videoPlayer.isPlaying)
+        if (videoPlayer != null)
         {
-            videoPlayer.Stop();
+            videoPlayer.prepareCompleted -= OnVideoPrepared;
+            if (videoPlayer.isPlaying) videoPlayer.Stop();
+            videoPlayer.targetTexture = null;
+        }
+
+        // Release the dynamically created RenderTexture
+        if (_dynamicRT != null)
+        {
+            if (videoImage != null) videoImage.texture = null;
+            _dynamicRT.Release();
+            Destroy(_dynamicRT);
+            _dynamicRT = null;
         }
     }
 }

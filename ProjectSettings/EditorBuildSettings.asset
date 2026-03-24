@@ -8,12 +8,24 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/IntroScene.unity
     guid: 99d2adb89b4437444b98fc48da573020
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BicycleScene.unity
     guid: 0a6669f88cef5be4f9a182c4a4c20244
+  - enabled: 1
+    path: Assets/Scenes/Finals/IntroScene_Final.unity
+    guid: 60d129d3933af804c94de69abcb1c00d
+  - enabled: 1
+    path: Assets/Scenes/Finals/Experiment_1_Final.unity
+    guid: bd35c0a0477f4714297353997373afcc
+  - enabled: 1
+    path: Assets/Scenes/Finals/Experiment_2_Final.unity
+    guid: 2b820e313da69d64abc39e9f02c96282
+  - enabled: 1
+    path: Assets/Scenes/Finals/Experiment_3_Final.unity
+    guid: 45a882525ab9a0f4fb400f53a6edfa18
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 62f9c35774989a145b02c594b055cb99, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

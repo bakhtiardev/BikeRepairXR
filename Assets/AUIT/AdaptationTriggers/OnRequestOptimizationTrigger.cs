@@ -5,8 +5,10 @@ using AUIT.AdaptationObjectives.Definitions;
 using AUIT.Extras;
 using AUIT.Solvers;
 using Numpy;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace AUIT.AdaptationTriggers
 {
@@ -65,9 +67,8 @@ namespace AUIT.AdaptationTriggers
         }
 
     }
-    
-    
-    
+
+#if UNITY_EDITOR
     [CustomEditor(typeof(OnRequestOptimizationTrigger))]
     public class MyComponentEditor : Editor
     {
@@ -84,4 +85,5 @@ namespace AUIT.AdaptationTriggers
             }
         }
     }
+#endif
 }

@@ -50,6 +50,13 @@ public class RestartLevelController : MonoBehaviour
     private bool wasLeftGripPressed = false;
     private bool wasRightGripPressed = false;
     
+    void Awake()
+    {
+        // CRITICAL: Reset all state when the scene loads
+        // This ensures the counter is always 0 at scene start
+        ResetState();
+    }
+    
     void Start()
     {
         // Create UI if not assigned
@@ -68,6 +75,30 @@ public class RestartLevelController : MonoBehaviour
         {
             countText.gameObject.SetActive(false);
         }
+    }
+    
+    /// <summary>
+    /// Resets all state variables to their initial values.
+    /// Called on Awake to ensure clean state when scene loads.
+    /// </summary>
+    private void ResetState()
+    {
+        pressCount = 0;
+        lastPressTime = 0f;
+        lastCancelTime = 0f;
+        isPromptShowing = false;
+        
+        // Reset all button states
+        wasAPressed = false;
+        wasBPressed = false;
+        wasXPressed = false;
+        wasYPressed = false;
+        wasLeftTriggerPressed = false;
+        wasRightTriggerPressed = false;
+        wasLeftGripPressed = false;
+        wasRightGripPressed = false;
+        
+        Debug.Log("[RestartLevelController] State reset - counter is now 0");
     }
     
     void Update()
@@ -104,10 +135,12 @@ public class RestartLevelController : MonoBehaviour
         }
         
         // Check if we're within the time window
-        if (Time.time - lastPressTime > pressTimeWindow)
+        // Only reset if we've pressed before (lastPressTime > 0) and too much time has passed
+        if (lastPressTime > 0f && Time.time - lastPressTime > pressTimeWindow)
         {
             // Reset count if too much time has passed
             pressCount = 0;
+            Debug.Log("[RestartLevelController] Time window expired, counter reset to 0");
         }
         
         pressCount++;
@@ -120,7 +153,7 @@ public class RestartLevelController : MonoBehaviour
             countText.text = $"Restart: {pressCount}/{pressesRequired}";
         }
         
-        Debug.Log($"A button pressed: {pressCount}/{pressesRequired}");
+        Debug.Log($"[RestartLevelController] A button pressed: {pressCount}/{pressesRequired}");
         
         // Check if we've reached the required count
         if (pressCount >= pressesRequired)
