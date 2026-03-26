@@ -1548,8 +1548,8 @@ MonoBehaviour:
   videoPlayer: {fileID: 295854113}
   videoImage: {fileID: 295854114}
   instructions:
-  - Welcome! Follow the instructions to complete the back wheel removal task. Use
-    Left Controller X button to go Prev and Y button to go Next
+  - Welcome! Follow the instructions to complete the pedal removal task. Use Left
+    Controller X button to go Prev and Y button to go Next
   - 'Step 1: Grab the wrench from the tool rack.'
   - 'Step 2: Use the wrench on the left pedal bolt (left in the direction when you
     sit on the bicycle) to loosen it.'
@@ -2230,6 +2230,9 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 2092779146261428793, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
     - {fileID: 6757056383594880129, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
+    - {fileID: 7271791305813915135, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
+    - {fileID: 1516864207553690057, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
+    - {fileID: 2998465163053194863, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6051690756159023080, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
       insertIndex: -1
@@ -5411,7 +5414,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1830385473
 Transform:
   m_ObjectHideFlags: 0

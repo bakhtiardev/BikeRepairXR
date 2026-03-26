@@ -2027,6 +2027,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6757056383594880129, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
+    - {fileID: 7271791305813915135, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
+    - {fileID: 1516864207553690057, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
+    - {fileID: 2092779146261428793, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4405375705422473468, guid: 219edf419bb0d1b4382b7aba4204b8cd, type: 3}
       insertIndex: -1
@@ -5821,13 +5824,13 @@ MonoBehaviour:
   videoPlayer: {fileID: 94653093}
   videoImage: {fileID: 94653094}
   instructions:
-  - Welcome! Follow the instructions to complete the back wheel removal task. Use
+  - Welcome! Follow the instructions to complete the front wheel removal task. Use
     Left Controller X button to go Prev and Y button to go Next
   - 'Step 1: Grab the wrench from the working desk. Use the side trigger to grab
     the wrench'
   - 'Step 2: Use the wrench on the front wheel axle to unscrew it.'
-  - 'Step 3: Once unscrewed, grab the back wheel with both hands, using the controllers
-    front triggers. Then place the back wheel on the empty carpet'
+  - 'Step 3: Once unscrewed, grab the front wheel with both hands, using the controllers
+    front triggers. Then place the front wheel on the empty carpet'
   - You're all set! Great job completing the task.
   instructionVideos:
   - {fileID: 32900000, guid: 054a354d0b2ee68429812916a9948043, type: 3}
