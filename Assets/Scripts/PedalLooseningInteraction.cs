@@ -50,6 +50,10 @@ public class PedalLooseningInteraction : MonoBehaviour
     [Header("Bolt Settings")]
     public int turnsRequired = 8;
 
+    [Header("Pedal Side")]
+    [Tooltip("Which pedal this zone controls.")]
+    public bool isLeftPedal = true;
+
     // ── State ─────────────────────────────────────────────────────────────────
     private int  _turns        = 0;
     private bool _boltLoosened = false;
@@ -122,8 +126,9 @@ public class PedalLooseningInteraction : MonoBehaviour
     {
         _boltLoosened = true;
 
+        string pedalSide = isLeftPedal ? "LEFT" : "RIGHT";
         if (counterText != null)
-            counterText.text = "Bolt loose!\nGrab the pedal and\ncarry it to the carpet.";
+            counterText.text = $"{pedalSide} Pedal Bolt loose!\nGrab the pedal and\ncarry it to the carpet.";
 
         if (pedalGrab != null)
             pedalGrab.enabled = true;
@@ -133,8 +138,9 @@ public class PedalLooseningInteraction : MonoBehaviour
 
     private void UpdateCounterText()
     {
+        string pedalSide = isLeftPedal ? "LEFT" : "RIGHT";
         if (counterText != null)
-            counterText.text = $"Turns: {_turns} / {turnsRequired}";
+            counterText.text = $"{pedalSide} Pedal\nTurns: {_turns} / {turnsRequired}";
     }
 
     // ── Editor Gizmo ──────────────────────────────────────────────────────────

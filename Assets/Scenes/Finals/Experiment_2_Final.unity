@@ -1094,6 +1094,7 @@ MonoBehaviour:
   zoneRadius: 0.7
   wrenchTipOffset: 0.06
   turnsRequired: 8
+  isLeftPedal: 1
 --- !u!114 &287788525 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2722822990176674892, guid: 50be278e32a579c47934a40be20880df, type: 3}
@@ -1548,15 +1549,16 @@ MonoBehaviour:
   videoPlayer: {fileID: 295854113}
   videoImage: {fileID: 295854114}
   instructions:
-  - Welcome! Follow the instructions to complete the pedal removal task. Use Left
-    Controller X button to go Prev and Y button to go Next
-  - 'Step 1: Grab the wrench from the tool rack.'
-  - 'Step 2: Use the wrench on the left pedal bolt (left in the direction when you
+  - 'Welcome! Follow the instructions to complete the pedal removal task. Use Left
+    Controller X button to go Prev and Y button to go Next. REMEMBER: Read the instruction
+    and watch the video before proceed.'
+  - 'Step 1: Grab the wrench from the table. Use the side trigger to grab it.'
+  - 'Step 2: Use the wrench on the LEFT pedal bolt (LEFT in the direction when you
     sit on the bicycle) to loosen it.'
-  - 'Step 3: Once loose, grab the pedal and remove it.'
-  - 'Step 4: Use the wrench on the right pedal bolt (right in the direction when
+  - 'Step 3: Once loose, grab the pedal with the side triggers and remove it.'
+  - 'Step 4: Use the wrench on the RIGHT pedal bolt (RIGHT in the direction when
     you sit on the bicycle) to loosen it.'
-  - 'Step 3: Once loose, grab the pedal and remove it.'
+  - 'Step 5: Once loose, grab the pedal with the side triggers and remove it.'
   - Excellent work! You've successfully changed the pedal.
   instructionVideos:
   - {fileID: 32900000, guid: 054a354d0b2ee68429812916a9948043, type: 3}
@@ -1677,6 +1679,7 @@ MonoBehaviour:
   zoneRadius: 0.76
   wrenchTipOffset: 0.06
   turnsRequired: 8
+  isLeftPedal: 0
 --- !u!4 &436697874
 Transform:
   m_ObjectHideFlags: 0
@@ -1750,6 +1753,10 @@ PrefabInstance:
     - target: {fileID: 5568758619435239318, guid: 46fdef3df9a5a354caf7692f85e5eff2, type: 3}
       propertyPath: m_Name
       value: Locomotor
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568758619435239318, guid: 46fdef3df9a5a354caf7692f85e5eff2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5568758619435239319, guid: 46fdef3df9a5a354caf7692f85e5eff2, type: 3}
       propertyPath: m_RootOrder
@@ -2381,15 +2388,15 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 649619481}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.8}
+  m_LocalRotation: {x: -0, y: 0.79352057, z: -0, w: 0.6085434}
+  m_LocalPosition: {x: 0, y: 0, z: -0.195}
   m_LocalScale: {x: 0.002, y: 0.002, z: 0.002}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 675110679}
   - {fileID: 1852836715}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 105.032, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1.6, y: 1.1}
@@ -3717,9 +3724,7 @@ GameObject:
   - component: {fileID: 1232722304}
   - component: {fileID: 1232722303}
   - component: {fileID: 1232722302}
-  - component: {fileID: 1232722301}
   - component: {fileID: 1232722300}
-  - component: {fileID: 1232722298}
   - component: {fileID: 1232722296}
   - component: {fileID: 1232722295}
   - component: {fileID: 1232722305}
@@ -3765,20 +3770,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Oculus.Interaction::Oculus.Interaction.Surfaces.ColliderSurface
   _collider: {fileID: 1232722306}
---- !u!114 &1232722298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232722294}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b3b35c1bb638f42a6b2a5fdca36be8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ControllerUIInteractor
-  targetCanvas: {fileID: 1232722303}
-  maxRayDistance: 10
 --- !u!114 &1232722300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3795,25 +3786,6 @@ MonoBehaviour:
   _addNewPointsToFront: 0
   _forwardElement: {fileID: 0}
   _canvas: {fileID: 1232722303}
---- !u!114 &1232722301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232722294}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04f82dbe0ecdf0d4cbb5aefa1491e36a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IntroFlowController
-  welcomePanel: {fileID: 1960140904}
-  descriptionPanel: {fileID: 0}
-  startButton: {fileID: 0}
-  backButton: {fileID: 0}
-  nextButton: {fileID: 0}
-  currentPage: 0
-  bicycleSceneName: BicycleScene
 --- !u!114 &1232722302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3868,7 +3840,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1232722294}
   m_LocalRotation: {x: -0, y: -0.71334875, z: -0, w: 0.70080924}
-  m_LocalPosition: {x: 0, y: 0, z: -0.116}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 0.0004, y: 0.0004, z: 0.0004}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3877,7 +3849,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -91.016, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.347, y: 0.904}
+  m_AnchoredPosition: {x: -2.431, y: 0.769}
   m_SizeDelta: {x: 800, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1232722305
@@ -4809,6 +4781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThumbstickLocomotion
   moveSpeed: 1
+  locomotionEnabled: 1
 --- !u!114 &1505957625 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11400010, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
@@ -6029,7 +6002,7 @@ Transform:
   m_GameObject: {fileID: 1955543001}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.994, y: 0.1, z: 0.968}
+  m_LocalPosition: {x: 1.307, y: 0.1, z: -0.133}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6786,7 +6759,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7435834989299742803, guid: e6084503f826bbb428b1e677dc1a75d4, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6663884219539110884, guid: e6084503f826bbb428b1e677dc1a75d4, type: 3}

@@ -21,6 +21,9 @@ MonoBehaviour:
     DebugTypes:
     - Meta.XR.MultiplayerBlocks.Shared.CustomMatchmaking
     - Meta.XR.MultiplayerBlocks.Shared.FriendsMatchmaking
+  - AssemblyName: Assembly-CSharp
+    DebugTypes:
+    - ThumbstickLocomotion
   immersiveDebuggerEnabled: 1
   immersiveDebuggerDisplayAtStartup: 0
   enableOnlyInDebugBuild: 0

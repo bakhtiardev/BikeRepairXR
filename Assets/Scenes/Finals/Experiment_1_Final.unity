@@ -1101,7 +1101,7 @@ Transform:
   m_GameObject: {fileID: 325600895}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.503, y: 0.1, z: 1.429}
+  m_LocalPosition: {x: 1.47, y: 0.1, z: -0.277}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2177,18 +2177,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 674916859}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.8}
+  m_LocalRotation: {x: -0, y: 0.81890833, z: -0, w: 0.5739244}
+  m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 0.002, y: 0.002, z: 0.002}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1507017276}
   - {fileID: 276856755}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 109.951, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.6, y: 1.1}
+  m_AnchoredPosition: {x: 1.507, y: 1.1}
   m_SizeDelta: {x: 800, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &674916863
@@ -4789,6 +4789,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Locomotor
       objectReference: {fileID: 0}
+    - target: {fileID: 5568758619435239318, guid: 46fdef3df9a5a354caf7692f85e5eff2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5568758619435239319, guid: 46fdef3df9a5a354caf7692f85e5eff2, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -5219,6 +5223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThumbstickLocomotion
   moveSpeed: 1
+  locomotionEnabled: 1
 --- !u!114 &1960133342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5824,13 +5829,15 @@ MonoBehaviour:
   videoPlayer: {fileID: 94653093}
   videoImage: {fileID: 94653094}
   instructions:
-  - Welcome! Follow the instructions to complete the front wheel removal task. Use
-    Left Controller X button to go Prev and Y button to go Next
+  - 'Welcome! Follow the instructions to complete the front wheel removal task. Use
+    Left Controller X button to go Prev and Y button to go Next. REMEMBER: Read the
+    instruction and watch the video before proceed.'
   - 'Step 1: Grab the wrench from the working desk. Use the side trigger to grab
-    the wrench'
-  - 'Step 2: Use the wrench on the front wheel axle to unscrew it.'
+    the wrench.'
+  - 'Step 2: Use the wrench on the FRONT wheel axle to unscrew it. (The video is
+    on the back wheel but the interaction is the same).'
   - 'Step 3: Once unscrewed, grab the front wheel with both hands, using the controllers
-    front triggers. Then place the front wheel on the empty carpet'
+    front triggers. Then place the front wheel on the empty carpet.'
   - You're all set! Great job completing the task.
   instructionVideos:
   - {fileID: 32900000, guid: 054a354d0b2ee68429812916a9948043, type: 3}
@@ -6614,7 +6621,8 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7435834989299742803, guid: e6084503f826bbb428b1e677dc1a75d4, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6663884219539110884, guid: e6084503f826bbb428b1e677dc1a75d4, type: 3}
