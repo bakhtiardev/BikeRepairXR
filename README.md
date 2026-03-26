@@ -64,18 +64,9 @@ NuGet .NET packages (see [Assets/packages.config](Assets/packages.config); resto
 ## Project structure
 
 ```text
-.
-├─ Assembly-CSharp-Editor.csproj
-├─ Assembly-CSharp.csproj
-├─ BikeRepairXR.sln
 ├─ README.md
-├─ UniTask.Addressables.csproj
-├─ UniTask.csproj
-├─ UniTask.DOTween.csproj
-├─ UniTask.Editor.csproj
-├─ UniTask.Linq.csproj
-├─ UniTask.TextMeshPro.csproj
 ├─ Assets/
+|  ├─ allen_wrench/
 │  ├─ AUIT/
 │  ├─ Editor/
 │  ├─ InstructionVideos/
@@ -92,12 +83,8 @@ NuGet .NET packages (see [Assets/packages.config](Assets/packages.config); resto
 │  ├─ Scripts/
 │  ├─ Settings/
 │  ├─ Simple Garage/
-│  ├─ StreamingAssets/
-│  ├─ TextMesh Pro/
-│  ├─ TutorialInfo/
+|  ├─ UserStudyDocuments/
 │  ├─ XR/
-│  ├─ XR 1/
-│  └─ XR 2/
 ├─ Packages/
 ├─ ProjectSettings/
 └─ UserSettings/
